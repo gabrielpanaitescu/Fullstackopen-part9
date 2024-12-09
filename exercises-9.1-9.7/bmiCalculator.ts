@@ -5,8 +5,6 @@ interface BodyValues {
   height: number;
 }
 
-console.log(process.argv);
-
 const parseArgs = (args: string[]): BodyValues => {
   if (args.length < 4)
     throw new Error("Not enough data provided. Provide the height and weight");
