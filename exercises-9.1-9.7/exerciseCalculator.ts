@@ -4,7 +4,7 @@ interface ExerciseTracker {
   periodLength: number;
   trainingDays: number;
   success: boolean;
-  rating: 1 | 2 | 3;
+  rating: number;
   ratingDescription: string;
   target: number;
   average: number;
@@ -71,6 +71,8 @@ const calculateExercises = (
     case 3:
       ratingDescription = "Wicked sick";
       break;
+    default:
+      ratingDescription = "Not found for selected parameters";
   }
 
   return {

@@ -6,15 +6,15 @@ interface BodyValues {
 }
 
 const parseArgs = (args: string[]): BodyValues => {
-  if (args.length < 4)
+  if (args.length < 2)
     throw new Error("Not enough data provided. Provide the height and weight");
 
-  if (args.length > 4)
+  if (args.length > 2)
     throw new Error(
       "Too much data provided. Provide only the height and weight"
     );
 
-  const values = process.argv.slice(2);
+  const values = args;
 
   if (includesNonNumber(values))
     throw new Error("Values must be of type Number");
@@ -28,32 +28,41 @@ const parseArgs = (args: string[]): BodyValues => {
   };
 };
 
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   const heightInMeters = height / 100;
 
   const bmi = Math.round(weight / Math.pow(heightInMeters, 2));
 
+  let res;
+
   if (bmi < 18.5) {
-    return "Underweight";
+    res = "Underweight";
   } else if (bmi <= 24.9) {
-    return "Healthy";
+    res = "Healthy";
   } else if (bmi <= 29.9) {
-    return "Overweight";
+    res = "Overweight";
   } else if (bmi <= 39.9) {
-    return "Obese";
+    res = "Obese";
   } else if (bmi >= 40) {
-    return "Severe obesity";
+    res = "Severe obesity";
+  } else {
+    throw new Error("Bad user input. Could not calculate BMI");
   }
+
+  return res;
 };
 
-try {
-  const { height, weight } = parseArgs(process.argv);
+if (require.main === module) {
+  console.log("script ran from cmd line");
+  try {
+    const { height, weight } = parseArgs(process.argv.slice(2));
 
-  console.log(calculateBmi(height, weight));
-} catch (error) {
-  let errorMessage = "Something wrong happened.";
+    console.log(calculateBmi(height, weight));
+  } catch (error) {
+    let errorMessage = "Something wrong happened.";
 
-  if (error instanceof Error) errorMessage += "Error: " + error.message;
+    if (error instanceof Error) errorMessage += "Error: " + error.message;
 
-  console.log(errorMessage);
+    console.log(errorMessage);
+  }
 }
