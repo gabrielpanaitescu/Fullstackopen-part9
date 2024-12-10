@@ -1,8 +1,7 @@
 import express from "express";
 import { calculateBmi } from "../bmiCalculator";
-import { isNotNumber } from "../utils";
 
-const bmiRouter = express.Router();
+export const bmiRouter = express.Router();
 
 bmiRouter.get("/", (req, res) => {
   console.log("req.query", req.query);
@@ -11,10 +10,9 @@ bmiRouter.get("/", (req, res) => {
     res.send({ error: "malformatted parameters. height or weight missing" });
     return;
   }
-
   const { height, weight } = req.query;
 
-  if (isNotNumber(height) || isNotNumber(weight)) {
+  if (isNaN(Number(height)) || isNaN(Number(weight))) {
     res.send({ error: "malformatted parameters. non number values provided" });
     return;
   }
@@ -22,5 +20,3 @@ bmiRouter.get("/", (req, res) => {
 
   res.send({ height, weight, bmi });
 });
-
-export default bmiRouter;

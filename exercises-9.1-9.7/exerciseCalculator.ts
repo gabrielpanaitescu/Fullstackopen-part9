@@ -1,6 +1,6 @@
 import { includesNonNumber } from "./utils";
 
-interface ExerciseTracker {
+export interface ExerciseTracker {
   periodLength: number;
   trainingDays: number;
   success: boolean;
@@ -10,7 +10,7 @@ interface ExerciseTracker {
   average: number;
 }
 
-interface ExerciseTrackerInputs {
+export interface ExerciseTrackerInputs {
   exerciseHoursPerDay: number[];
   target: number;
 }
@@ -35,7 +35,7 @@ const parseArgs = (args: string[]): ExerciseTrackerInputs => {
   };
 };
 
-const calculateExercises = (
+export const calculateExercises = (
   exerciseHoursPerDay: number[],
   target: number
 ): ExerciseTracker => {
@@ -86,14 +86,16 @@ const calculateExercises = (
   };
 };
 
-try {
-  const { exerciseHoursPerDay, target } = parseArgs(process.argv);
+if (require.main === module) {
+  try {
+    const { exerciseHoursPerDay, target } = parseArgs(process.argv);
 
-  console.log(calculateExercises(exerciseHoursPerDay, target));
-} catch (error) {
-  let errorMessage = "Something went wrong";
+    console.log(calculateExercises(exerciseHoursPerDay, target));
+  } catch (error) {
+    let errorMessage = "Something went wrong";
 
-  if (error instanceof Error) errorMessage += " Error: " + error.message;
+    if (error instanceof Error) errorMessage += " Error: " + error.message;
 
-  console.log(errorMessage);
+    console.log(errorMessage);
+  }
 }
