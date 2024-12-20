@@ -1,6 +1,10 @@
 import { Diagnosis } from "../types";
 import diagnosesData from "../../data/diagnoses";
 
-export const getDiagnoses = (): Diagnosis[] => {
+const getDiagnoses = (): Diagnosis[] => {
   return diagnosesData;
+};
+
+export default {
+  getDiagnoses,
 };
