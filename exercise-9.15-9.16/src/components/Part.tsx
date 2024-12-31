@@ -14,8 +14,8 @@ export const Part = ({ part }: { part: CoursePart }) => {
       content = (
         <div>
           <h3>{part.name}</h3>
-          <p> {part.exerciseCount} </p>
-          <p>{part.description} </p>
+          <p>exercises: {part.exerciseCount}</p>
+          <p>description: {part.description}</p>
           <p>{part.kind}</p>
         </div>
       );
@@ -24,8 +24,8 @@ export const Part = ({ part }: { part: CoursePart }) => {
       content = (
         <div>
           <h3>{part.name}</h3>
-          <p> {part.exerciseCount} </p>
-          <p>{part.groupProjectCount} </p>
+          <p>exercises: {part.exerciseCount}</p>
+          <p>{part.groupProjectCount}</p>
           <p>{part.kind}</p>
         </div>
       );
@@ -34,9 +34,9 @@ export const Part = ({ part }: { part: CoursePart }) => {
       content = (
         <div>
           <h3>{part.name}</h3>
-          <p> {part.exerciseCount} </p>
-          <p>{part.description} </p>
-          <p>{part.backgroundMaterial} </p>
+          <p>exercises: {part.exerciseCount}</p>
+          <p>description: {part.description}</p>
+          <p>{part.backgroundMaterial}</p>
           <p>{part.kind}</p>
         </div>
       );
@@ -45,9 +45,9 @@ export const Part = ({ part }: { part: CoursePart }) => {
       content = (
         <div>
           <h3>{part.name}</h3>
-          <p> {part.exerciseCount} </p>
-          <p>{part.description} </p>
-          <p>{part.requirements}</p>
+          <p>exercises: {part.exerciseCount}</p>
+          <p>description: {part.description}</p>
+          <p>requirements: {part.requirements.join(", ")}</p>
           <p>{part.kind}</p>
         </div>
       );

@@ -40,6 +40,13 @@ const App = () => {
   const courseName = "Half Stack application development";
   const courseParts: CoursePart[] = [
     {
+      name: "Backend development",
+      exerciseCount: 21,
+      description: "Typing the backend",
+      requirements: ["nodejs", "jest"],
+      kind: "special",
+    },
+    {
       name: "Fundamentals",
       exerciseCount: 10,
       description: "This is an awesome course part",
