@@ -36,6 +36,21 @@ patientsRouter.get("/", (_req, res: Response<RestrictedPatientData[]>) => {
   res.send(patientService.getRestrictedPatientsData());
 });
 
+patientsRouter.get("/:id", (req: Request, res: Response<Patient | string>) => {
+  const id = req.params.id;
+
+  const patient = patientService.getPatient(id);
+
+  console.log("id", id);
+  console.log("patient", patient);
+
+  if (!patient) {
+    res.status(404).json("patient id not found");
+  } else {
+    res.status(200).json(patient);
+  }
+});
+
 patientsRouter.post(
   "/",
   parsePatientMiddleware,

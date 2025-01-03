@@ -14,6 +14,13 @@ export interface Diagnosis {
   latin?: string;
 }
 
+export interface Entry {
+  description: string;
+  date: string;
+  specialist: string;
+  diagnosisCode: string;
+}
+
 export interface Patient {
   id: string;
   name: string;
@@ -21,9 +28,10 @@ export interface Patient {
   ssn: string;
   gender: Gender;
   occupation: string;
+  entries: Entry[];
 }
 
-export type RestrictedPatientData = Omit<Patient, "ssn">;
+export type RestrictedPatientData = Omit<Patient, "ssn" | "entries">;
 
 // export type ParsedPatientData = Omit<Patient, "id">;
 export type ParsedPatientData = z.infer<typeof PatientDataSchema>;

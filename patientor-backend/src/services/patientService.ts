@@ -16,6 +16,7 @@ const addPatient = (patient: ParsedPatientData): Patient => {
   const newPatient = {
     ...patient,
     id: uuid(),
+    entries: [],
   };
 
   patientsData.push(newPatient);
@@ -23,7 +24,14 @@ const addPatient = (patient: ParsedPatientData): Patient => {
   return newPatient;
 };
 
+const getPatient = (id: string): Patient | undefined => {
+  const foundPatient = patientsData.find((patient) => patient.id === id);
+
+  return foundPatient;
+};
+
 export default {
   getRestrictedPatientsData,
   addPatient,
+  getPatient,
 };
