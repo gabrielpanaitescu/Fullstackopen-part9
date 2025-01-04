@@ -41,9 +41,6 @@ patientsRouter.get("/:id", (req: Request, res: Response<Patient | string>) => {
 
   const patient = patientService.getPatient(id);
 
-  console.log("id", id);
-  console.log("patient", patient);
-
   if (!patient) {
     res.status(404).json("patient id not found");
   } else {
