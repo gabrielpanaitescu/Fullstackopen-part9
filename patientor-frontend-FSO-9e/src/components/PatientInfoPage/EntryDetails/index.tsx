@@ -1,0 +1,83 @@
+import { Box, List, ListItem, Paper, Stack, Typography } from "@mui/material";
+import { Entry } from "../../../types";
+import { DiagnosesByCode } from "../PatientInfo";
+import { HealthCheckEntryDetails } from "./HealthCheckEntryDetails";
+import { OccupationalHealthcareEntryDetails } from "./OccupationalHealthcareEntryDetails";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
+import WorkIcon from "@mui/icons-material/Work";
+import { HospitalEntryDetails } from "./HospitalEntryDetails";
+import { exhaustiveCheck } from "../../../utils";
+
+interface Props {
+  entry: Entry;
+  diagnosesByCode: DiagnosesByCode;
+}
+
+const EntryDetails = ({ entry, diagnosesByCode }: Props) => {
+  const iconMap = {
+    LocalHospitalIcon: <LocalHospitalIcon />,
+    MedicalServicesIcon: <MedicalServicesIcon />,
+    WorkIcon: <WorkIcon />,
+  };
+
+  const specificEntryTypeDetails = () => {
+    switch (entry.type) {
+      case "HealthCheck":
+        return <HealthCheckEntryDetails entry={entry} />;
+      case "OccupationalHealthcare":
+        return <OccupationalHealthcareEntryDetails entry={entry} />;
+      case "Hospital":
+        return <HospitalEntryDetails entry={entry} />;
+      default:
+        exhaustiveCheck(entry);
+    }
+  };
+
+  const icon =
+    entry.type === "HealthCheck"
+      ? iconMap.MedicalServicesIcon
+      : entry.type === "Hospital"
+      ? iconMap.LocalHospitalIcon
+      : entry.type === "OccupationalHealthcare"
+      ? iconMap.WorkIcon
+      : exhaustiveCheck(entry);
+
+  return (
+    <Paper
+      variant="outlined"
+      sx={{
+        padding: 1,
+        display: "flex",
+        flexDirection: "column",
+        gap: 1,
+      }}
+    >
+      <Stack direction="row" gap={1}>
+        <Typography variant="body1">Date: {entry.date}</Typography>
+        {icon}
+      </Stack>
+      <Typography variant="body1">Description: {entry.description}</Typography>
+
+      {entry.diagnosisCodes && Object.keys(diagnosesByCode).length > 0 ? (
+        <Box>
+          <Typography variant="body1">Diagnosis codes:</Typography>
+          <List>
+            {entry.diagnosisCodes.map((code) => (
+              <ListItem key={code}>
+                <strong>{code}</strong>: {diagnosesByCode[code].name}
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      ) : null}
+
+      {specificEntryTypeDetails()}
+      <Typography variant="body1">
+        <em>diagnose by</em> {entry.specialist}
+      </Typography>
+    </Paper>
+  );
+};
+
+export default EntryDetails;
