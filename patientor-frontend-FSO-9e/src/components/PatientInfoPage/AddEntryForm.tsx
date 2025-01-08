@@ -1,8 +1,16 @@
 import { useState } from "react";
-import { EntryFormValues, HealthCheckRating } from "../../types";
 import {
+  BaseEntry,
+  Diagnosis,
+  DiagnosisCode,
+  EntryFormValues,
+  HealthCheckRating,
+} from "../../types";
+import {
+  Box,
   Button,
   FormControl,
+  Input,
   InputLabel,
   MenuItem,
   Select,
@@ -11,8 +19,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { MultipleSelect } from "../MultipleSelect";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 interface Props {
+  diagnoses: Diagnosis[];
   entryType: string;
   open: boolean;
   addNewEntry: (values: EntryFormValues) => void;
@@ -36,6 +48,7 @@ const healthCheckRatingOptions: HealthCheckRatingOption[] =
   });
 
 export const AddEntryForm = ({
+  diagnoses,
   entryType,
   open,
   addNewEntry,
@@ -44,24 +57,43 @@ export const AddEntryForm = ({
   const [date, setDate] = useState("");
   const [specialist, setSpecialist] = useState("");
   const [description, setDescription] = useState("");
+  const [selectedDiagnosisCodes, setSelectedDiagnosisCodes] = useState<
+    DiagnosisCode[]
+  >([]);
   const [healthCheckRating, setHealthCheckRating] = useState(
     HealthCheckRating.Healthy
   );
+  const [employerName, setEmployerName] = useState("");
+  const [sickLeaveStartDate, setSickLeaveStartDate] = useState("");
+  const [sickLeaveEndDate, setSickLeaveEndDate] = useState("");
+  const [sickLeaveToggle, setSickLeaveToggle] = useState(false);
+  const [dischargeDate, setDischargeDate] = useState("");
+  const [criteria, setCriteria] = useState("");
 
   if (!open) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const baseEntryValues = {
+    const baseEntryValues: Omit<BaseEntry, "id"> = {
       date,
       specialist,
       description,
-      healthCheckRating: healthCheckRating,
     };
+
+    if (selectedDiagnosisCodes.length > 0)
+      baseEntryValues.diagnosisCodes = selectedDiagnosisCodes;
 
     switch (entryType) {
       case "Hospital":
+        addNewEntry({
+          ...baseEntryValues,
+          type: "Hospital",
+          discharge: {
+            date,
+            criteria,
+          },
+        });
         break;
 
       case "HealthCheck":
@@ -72,6 +104,20 @@ export const AddEntryForm = ({
         });
         break;
       case "OccupationalHealthcare":
+        const entry: EntryFormValues = {
+          ...baseEntryValues,
+          type: "OccupationalHealthcare",
+          employerName,
+        };
+
+        if (sickLeaveToggle) {
+          entry.sickLeave = {
+            startDate: sickLeaveStartDate,
+            endDate: sickLeaveEndDate,
+          };
+        }
+
+        addNewEntry(entry);
         break;
 
       default:
@@ -81,7 +127,12 @@ export const AddEntryForm = ({
     setDate("");
     setSpecialist("");
     setDescription("");
+    setSelectedDiagnosisCodes([]);
     setHealthCheckRating(HealthCheckRating.Healthy);
+    setEmployerName("");
+    setSickLeaveToggle(false);
+    setSickLeaveStartDate("");
+    setSickLeaveEndDate("");
   };
 
   const handleHealthRatingChange = (e: SelectChangeEvent<number>) => {
@@ -92,7 +143,6 @@ export const AddEntryForm = ({
         .find((v) => v === value);
 
       if (healthCheckRatingValue !== undefined) {
-        console.log(healthCheckRatingValue);
         setHealthCheckRating(healthCheckRatingValue);
       }
     }
@@ -117,14 +167,20 @@ export const AddEntryForm = ({
           <TextField
             required
             label="Specialist"
+            value={specialist}
             onChange={(e) => setSpecialist(e.target.value)}
           />
           <TextField
             required
             label="Description"
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-
+          <MultipleSelect
+            diagnoses={diagnoses}
+            selectedDiagnosisCodes={selectedDiagnosisCodes}
+            setSelectedDiagnosisCodes={setSelectedDiagnosisCodes}
+          />
           {entryType === "HealthCheck" && (
             <FormControl>
               <InputLabel id="healthCheckRating" sx={{ fontSize: "0.9rem" }}>
@@ -145,8 +201,101 @@ export const AddEntryForm = ({
               </Select>
             </FormControl>
           )}
+          {entryType === "OccupationalHealthcare" && (
+            <>
+              <TextField
+                required
+                label="Employer name"
+                value={employerName}
+                onChange={(e) => setEmployerName(e.target.value)}
+              />
+              <Button
+                sx={{ marginTop: 1 }}
+                onClick={() => setSickLeaveToggle((prev) => !prev)}
+                variant="contained"
+                size="small"
+                startIcon={
+                  sickLeaveToggle ? <VisibilityIcon /> : <VisibilityOffIcon />
+                }
+              >
+                Sick leave
+              </Button>
+
+              <Stack sx={{ marginLeft: 0.25 }}>
+                {sickLeaveToggle && (
+                  <Stack gap={0.25} paddingLeft={1.5}>
+                    <InputLabel
+                      id="sick-leave-start-date"
+                      sx={{ fontSize: "0.85rem" }}
+                    >
+                      Start date *
+                    </InputLabel>
+                    <Input
+                      id="sick-leave-start-date"
+                      type="date"
+                      required
+                      value={sickLeaveStartDate}
+                      onChange={({ target }) =>
+                        setSickLeaveStartDate(target.value)
+                      }
+                    />
+                    <InputLabel
+                      id="sick-leave-end-date"
+                      sx={{ fontSize: "0.85rem" }}
+                    >
+                      End date *
+                    </InputLabel>
+                    <Input
+                      id="sick-leave-end-date"
+                      type="date"
+                      required
+                      value={sickLeaveEndDate}
+                      onChange={({ target }) =>
+                        setSickLeaveEndDate(target.value)
+                      }
+                    />
+                  </Stack>
+                )}
+              </Stack>
+            </>
+          )}
+          {entryType === "Hospital" && (
+            <>
+              <Typography
+                sx={{
+                  color: "#333",
+                  fontSize: "0.95rem",
+                  marginLeft: 1,
+                  marginBottom: 0.5,
+                }}
+                variant="body1"
+              >
+                Discharge *
+              </Typography>
+              <Stack gap={1} paddingLeft={2}>
+                <TextField
+                  required
+                  label="Criteria"
+                  value={criteria}
+                  onChange={(e) => setCriteria(e.target.value)}
+                />
+                <Box paddingLeft={0.25}>
+                  <InputLabel id="discharge-date" sx={{ fontSize: "0.85rem" }}>
+                    Date *
+                  </InputLabel>
+                  <Input
+                    id="discharge-date"
+                    type="date"
+                    required
+                    value={dischargeDate}
+                    onChange={({ target }) => setDischargeDate(target.value)}
+                  />
+                </Box>
+              </Stack>
+            </>
+          )}
         </Stack>
-        <Stack direction="row" gap={1} marginTop={1}>
+        <Stack direction="row" gap={1} marginTop={3}>
           <Button
             color="error"
             size="small"

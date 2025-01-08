@@ -54,14 +54,20 @@ const EntryDetails = ({ entry, diagnosesByCode }: Props) => {
       }}
     >
       <Stack direction="row" gap={1}>
-        <Typography variant="body1">Date: {entry.date}</Typography>
+        <Typography variant="body1">
+          <strong>Date:</strong> {entry.date}
+        </Typography>
         {icon}
       </Stack>
-      <Typography variant="body1">Description: {entry.description}</Typography>
+      <Typography variant="body1">
+        <strong>Description:</strong> {entry.description}
+      </Typography>
 
       {entry.diagnosisCodes && Object.keys(diagnosesByCode).length > 0 ? (
         <Box>
-          <Typography variant="body1">Diagnosis codes:</Typography>
+          <Typography variant="body1">
+            <strong>Diagnosis codes:</strong>
+          </Typography>
           <List>
             {entry.diagnosisCodes.map((code) => (
               <ListItem key={code}>

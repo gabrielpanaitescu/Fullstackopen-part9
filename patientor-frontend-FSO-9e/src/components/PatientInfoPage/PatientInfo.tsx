@@ -1,4 +1,9 @@
-import { Diagnosis, EntryFormValues, Patient } from "../../types";
+import {
+  Diagnosis,
+  DiagnosisCode,
+  EntryFormValues,
+  Patient,
+} from "../../types";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import {
@@ -25,7 +30,7 @@ interface Props {
 }
 
 export interface DiagnosesByCode {
-  [key: Diagnosis["code"]]: Diagnosis;
+  [key: DiagnosisCode]: Diagnosis;
 }
 
 export const PatientInfo = ({ diagnoses }: Props) => {
@@ -177,6 +182,7 @@ export const PatientInfo = ({ diagnoses }: Props) => {
         </Alert>
       )}
       <AddEntryForm
+        diagnoses={diagnoses}
         entryType={entryType}
         open={formOpen}
         addNewEntry={addNewEntry}
