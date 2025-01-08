@@ -22,6 +22,7 @@ import {
 import { MultipleSelect } from "../MultipleSelect";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { exhaustiveCheck } from "../../utils";
 
 interface Props {
   diagnoses: Diagnosis[];

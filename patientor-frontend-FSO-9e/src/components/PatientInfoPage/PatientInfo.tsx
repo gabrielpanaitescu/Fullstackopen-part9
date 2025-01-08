@@ -27,6 +27,7 @@ import { AddEntryForm } from "./AddEntryForm";
 
 interface Props {
   diagnoses: Diagnosis[];
+  setTriggerRefetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface DiagnosesByCode {
