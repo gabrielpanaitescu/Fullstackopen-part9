@@ -82,18 +82,47 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.values(patients).map((patient: Patient) => (
-            <TableRow key={patient.id}>
-              <TableCell>
-                <Link to={`/${patient.id}`}>{patient.name}</Link>
-              </TableCell>
-              <TableCell>{patient.gender}</TableCell>
-              <TableCell>{patient.occupation}</TableCell>
-              <TableCell>
-                <HealthRatingBar showText={false} rating={1} />
-              </TableCell>
-            </TableRow>
-          ))}
+          {Object.values(patients).map((patient: Patient) => {
+            const patientHealthCheckRatingData = patient.entries
+              .map((entry) => {
+                if (
+                  entry.type === "HealthCheck" &&
+                  entry.healthCheckRating !== undefined
+                ) {
+                  return entry.healthCheckRating;
+                } else {
+                  return null;
+                }
+              })
+              .filter((v) => v !== null);
+
+            const healthCheckAverage: number | null =
+              patientHealthCheckRatingData.length < 1
+                ? null
+                : patientHealthCheckRatingData.reduce(
+                    (accum, currValue) => accum + currValue
+                  ) / patientHealthCheckRatingData.length;
+
+            return (
+              <TableRow key={patient.id}>
+                <TableCell>
+                  <Link to={`/${patient.id}`}>{patient.name}</Link>
+                </TableCell>
+                <TableCell>{patient.gender}</TableCell>
+                <TableCell>{patient.occupation}</TableCell>
+                <TableCell>
+                  {healthCheckAverage !== null ? (
+                    <HealthRatingBar
+                      showText={false}
+                      rating={healthCheckAverage}
+                    />
+                  ) : (
+                    <Typography variant="body2">No data yet</Typography>
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
       <AddPatientModal

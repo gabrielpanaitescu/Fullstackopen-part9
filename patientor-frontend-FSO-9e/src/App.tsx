@@ -14,6 +14,9 @@ import { PatientInfo } from "./components/PatientInfoPage/PatientInfo";
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+  const [triggerRefetch, setTriggerRefetch] = useState(false);
+
+  console.log(triggerRefetch);
 
   useEffect(() => {
     void axios.get<void>(`${apiBaseUrl}/ping`);
@@ -31,7 +34,9 @@ const App = () => {
 
     void fetchPatientList();
     void fetchDiagnosisList();
-  }, []);
+
+    return setTriggerRefetch(false);
+  }, [triggerRefetch]);
 
   return (
     <div className="App">
@@ -56,7 +61,12 @@ const App = () => {
             />
             <Route
               path="/:id"
-              element={<PatientInfo diagnoses={diagnoses} />}
+              element={
+                <PatientInfo
+                  diagnoses={diagnoses}
+                  setTriggerRefetch={setTriggerRefetch}
+                />
+              }
             />
           </Routes>
         </Container>

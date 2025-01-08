@@ -33,7 +33,7 @@ export interface DiagnosesByCode {
   [key: DiagnosisCode]: Diagnosis;
 }
 
-export const PatientInfo = ({ diagnoses }: Props) => {
+export const PatientInfo = ({ diagnoses, setTriggerRefetch }: Props) => {
   const [patient, setPatient] = useState<Patient>();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -80,6 +80,7 @@ export const PatientInfo = ({ diagnoses }: Props) => {
       setError("");
       setFormOpen(false);
       setSuccess(`Entry successfully added`);
+      setTriggerRefetch(true);
       setTimeout(() => {
         setSuccess("");
       }, 3000);
