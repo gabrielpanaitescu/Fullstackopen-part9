@@ -16,8 +16,6 @@ const App = () => {
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
   const [triggerRefetch, setTriggerRefetch] = useState(false);
 
-  console.log(triggerRefetch);
-
   useEffect(() => {
     void axios.get<void>(`${apiBaseUrl}/ping`);
 

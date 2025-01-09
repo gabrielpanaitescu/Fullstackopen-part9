@@ -22,7 +22,6 @@ import {
 import { MultipleSelect } from "../MultipleSelect";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { exhaustiveCheck } from "../../utils";
 
 interface Props {
   diagnoses: Diagnosis[];
@@ -134,6 +133,8 @@ export const AddEntryForm = ({
     setSickLeaveToggle(false);
     setSickLeaveStartDate("");
     setSickLeaveEndDate("");
+    setCriteria("");
+    setDischargeDate("");
   };
 
   const handleHealthRatingChange = (e: SelectChangeEvent<number>) => {
