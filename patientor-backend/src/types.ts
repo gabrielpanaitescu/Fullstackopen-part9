@@ -1,20 +1,13 @@
 import { z } from "zod";
 import { PatientDataSchema } from "./utils/newPatient";
 
-// export type Gender = "male" | "female" | "other";
-export enum Gender {
-  Male = "male",
-  Female = "female",
-  Other = "other",
-}
-
 export interface Diagnosis {
   code: string;
   name: string;
   latin?: string;
 }
 
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   date: string;
   specialist: string;
@@ -34,7 +27,7 @@ interface HealthCheckEntry extends BaseEntry {
   healthCheckRating: HealthCheckRating;
 }
 
-type SickLeave = {
+export type SickLeave = {
   startDate: string;
   endDate: string;
 };
@@ -45,7 +38,7 @@ interface OccupationalHealthcareEntry extends BaseEntry {
   sickLeave?: SickLeave;
 }
 
-type Discharge = {
+export type Discharge = {
   date: string;
   criteria: string;
 };
@@ -60,11 +53,17 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HospitalEntry;
 
-// type UnionOmit<T, K extends string | number | symbol> = T extends unknown
-//   ? Omit<T, K>
-//   : never;
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
 
-// type IdlessEntry = UnionOmit<Entry, "id">;
+export type IdlessEntry = UnionOmit<Entry, "id">;
+
+export enum Gender {
+  Male = "male",
+  Female = "female",
+  Other = "other",
+}
 
 export interface Patient {
   id: string;
@@ -76,7 +75,7 @@ export interface Patient {
   entries: Entry[];
 }
 
-export type RestrictedPatientData = Omit<Patient, "ssn" | "entries">;
+export type RestrictedPatientData = Omit<Patient, "ssn">;
 
 // export type ParsedPatientData = Omit<Patient, "id">;
 export type ParsedPatientData = z.infer<typeof PatientDataSchema>;
