@@ -186,12 +186,12 @@ export const AddEntryForm = ({
           {entryType === "HealthCheck" && (
             <FormControl>
               <InputLabel id="healthCheckRating" sx={{ fontSize: "0.9rem" }}>
-                Health Check Rating
+                Health Check Rating *
               </InputLabel>
               <Select
                 sx={{ width: 200, fontSize: "0.85rem" }}
                 labelId="healthCheckRating"
-                label="Health Check Rating"
+                label="Health Check Rating *"
                 value={healthCheckRating}
                 onChange={handleHealthRatingChange}
               >

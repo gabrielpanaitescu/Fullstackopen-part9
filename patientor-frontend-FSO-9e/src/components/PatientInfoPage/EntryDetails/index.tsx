@@ -16,9 +16,9 @@ interface Props {
 
 const EntryDetails = ({ entry, diagnosesByCode }: Props) => {
   const iconMap = {
-    LocalHospitalIcon: <LocalHospitalIcon />,
-    MedicalServicesIcon: <MedicalServicesIcon />,
-    WorkIcon: <WorkIcon />,
+    Hospital: <LocalHospitalIcon />,
+    HealthCheck: <MedicalServicesIcon />,
+    OccupationalHealthcare: <WorkIcon />,
   };
 
   const specificEntryTypeDetails = () => {
@@ -34,15 +34,6 @@ const EntryDetails = ({ entry, diagnosesByCode }: Props) => {
     }
   };
 
-  const icon =
-    entry.type === "HealthCheck"
-      ? iconMap.MedicalServicesIcon
-      : entry.type === "Hospital"
-      ? iconMap.LocalHospitalIcon
-      : entry.type === "OccupationalHealthcare"
-      ? iconMap.WorkIcon
-      : exhaustiveCheck(entry);
-
   return (
     <Paper
       variant="outlined"
@@ -57,7 +48,7 @@ const EntryDetails = ({ entry, diagnosesByCode }: Props) => {
         <Typography variant="body1">
           <strong>Date:</strong> {entry.date}
         </Typography>
-        {icon}
+        {iconMap[entry.type]}
       </Stack>
       <Typography variant="body1">
         <strong>Description:</strong> {entry.description}
