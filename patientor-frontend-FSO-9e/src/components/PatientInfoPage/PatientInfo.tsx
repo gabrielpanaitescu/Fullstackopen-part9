@@ -115,6 +115,12 @@ export const PatientInfo = ({ diagnoses, setTriggerRefetch }: Props) => {
     setFormOpen(false);
   };
 
+  const entryTypeOptions = [
+    "HealthCheck",
+    "Hospital",
+    "OccupationalHealthcare",
+  ];
+
   const handleEntryTypeChange = (e: SelectChangeEvent) => {
     setEntryType(e.target.value);
   };
@@ -160,11 +166,11 @@ export const PatientInfo = ({ diagnoses, setTriggerRefetch }: Props) => {
             value={entryType}
             onChange={handleEntryTypeChange}
           >
-            <MenuItem value="HealthCheck">Health Check</MenuItem>
-            <MenuItem value="OccupationalHealthcare">
-              Occupational Healthcare
-            </MenuItem>
-            <MenuItem value="Hospital">Hospital</MenuItem>
+            {entryTypeOptions.map((type) => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <Button
